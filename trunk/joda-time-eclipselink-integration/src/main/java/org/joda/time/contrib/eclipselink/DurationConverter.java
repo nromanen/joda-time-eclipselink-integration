@@ -1,40 +1,30 @@
 package org.joda.time.contrib.eclipselink;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import org.eclipse.persistence.mappings.DatabaseMapping;
 import org.eclipse.persistence.mappings.converters.Converter;
 import org.eclipse.persistence.sessions.Session;
-import org.joda.time.LocalDate;
+import org.joda.time.Duration;
 
 /**
- * Persist LocalDate via EclipseLink
+ * Persists org.joda.time.Duration using EclipseLink. Value is stored as a
+ * varchar.
  * 
  * @author georgi.knox
  * 
  */
-public class LocalDateConverter implements Converter {
+public class DurationConverter implements Converter {
 
     public Object convertDataValueToObjectValue(Object dataValue, Session session) {
-        if (dataValue instanceof Date)
-            return new LocalDate(dataValue);
+        if (dataValue instanceof String)
+            return new Duration(dataValue);
         throw new IllegalStateException("Converstion exception, value is not of LocalDate type.");
+
     }
 
     public Object convertObjectValueToDataValue(Object objectValue, Session arg1) {
 
-        if (objectValue instanceof LocalDate) {
-            LocalDate localDate = (LocalDate) objectValue;
-            String dateString = localDate.toString();
-            DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-            try {
-                return df.parse(dateString);
-            } catch (ParseException e) {
-                throw new IllegalStateException("Converstion exception, value is not of java.util.Date type.");
-            }
+        if (objectValue instanceof Duration) {
+            return ((Duration) objectValue).toString();
         }
         throw new IllegalStateException("Converstion exception, value is not of java.util.Date type.");
     }
