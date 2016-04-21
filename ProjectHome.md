@@ -1,0 +1,1 @@
+This project was established so developers can easily integrate Joda-Time with EclipseLink persistence.
